@@ -24,4 +24,5 @@ Group B:
 # Literature
 
 Hardin, Garrett. "The tragedy of the commons." science 162.3859 (1968): 1243-1248.
+
 Milinski, Manfred, Dirk Semmann, and Hans-Jürgen Krambeck. "Reputation helps solve the ‘tragedy of the commons’." Nature 415.6870 (2002): 424. https://www.nature.com/articles/415424a.pdf
