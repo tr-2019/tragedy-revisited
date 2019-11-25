@@ -37,9 +37,12 @@ Sylwester, Karolina and Roberts, Gilbert. "Reputation-based partner choice is an
 solving social dilemmas." Evolution and Human Behavior 34 (2013): 201 - 206. https://doi.org/10.1016/j.evolhumbehav.2012.11.009
 
 # Further notes
-Quick idea for indirect reciprocity game: Do players use their own coins to give away or keep or do they get coins to give away or take? -> Prospect Theory (Kahnemann 1979)
+Quick idea for indirect reciprocity game: Do players use their own coins to give away or keep or do they get coins to give away or take? -> May make a difference, see Prospect Theory (Kahnemann 1979) (maybe just cite this to show we discussed about it)
 
 From Stefano:
 Implementing only history as treatment, without indirect reciprocity: Stefano would expect that only revealing the other players' decisions would lead not to less, but more extraction from the common pool! Because "fair" players would feel encouraged to also be uncooperative?! Are we convinced? Stefano suggests we should test this
 
+From someone in class: Consider giving the players more time to decide because they have to process the other players' history of decisions. 
+
+From Stefano: Only reveal history of pool game decisions or also history of decisions as a donor? In the Milinski paper decisions of both games were revealed! Do we want that?
 
