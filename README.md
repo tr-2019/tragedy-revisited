@@ -38,3 +38,8 @@ solving social dilemmas." Evolution and Human Behavior 34 (2013): 201 - 206. htt
 
 # Further notes
 Quick idea for indirect reciprocity game: Do players use their own coins to give away or keep or do they get coins to give away or take? -> Prospect Theory (Kahnemann 1979)
+
+From Stefano:
+Implementing only history as treatment, without indirect reciprocity: Stefano would expect that only revealing the other players' decisions would lead not to less, but more extraction from the common pool! Because "fair" players would feel encouraged to also be uncooperative?! Are we convinced? Stefano suggests we should test this
+
+
