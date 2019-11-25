@@ -46,3 +46,4 @@ From someone in class: Consider giving the players more time to decide because t
 
 From Stefano: Only reveal history of pool game decisions or also history of decisions as a donor? In the Milinski paper decisions of both games were revealed! Do we want that?
 
+Next thing to do according to Stefano: Start the coding and publish it on GitHub, so he can give us feedback
