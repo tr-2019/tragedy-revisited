@@ -35,3 +35,6 @@ Milinski, Manfred, Dirk Semmann, and Hans-Jürgen Krambeck. "Reputation helps so
 
 Sylwester, Karolina and Roberts, Gilbert. "Reputation-based partner choice is an effective alternative to indirect reciprocity in
 solving social dilemmas." Evolution and Human Behavior 34 (2013): 201 - 206. https://doi.org/10.1016/j.evolhumbehav.2012.11.009
+
+# Further notes
+Quick idea for indirect reciprocity game: Do players use their own coins to give away or keep or do they get coins to give away or take? -> Prospect Theory (Kahnemann 1979)
