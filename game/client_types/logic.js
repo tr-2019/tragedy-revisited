@@ -1,6 +1,6 @@
 /**
  * # Logic type implementation of the game stages
- * Copyright(c) 2019 LeoAlexLennart <>
+ * Copyright(c) 2020 LeoAlexanderLennart <>
  * MIT Licensed
  *
  * http://www.nodegame.org
@@ -29,12 +29,41 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
         }
     });
 
-    stager.extendStep('game', {
+    stager.extendStep('pbgame', {
+      cb: function() {
+        console.log('PBgame.');
+      }
+    });
+
+    stager.extendStep('irgame1', {
+          matcher: {
+              roles: [ 'DONOR', 'RECEIVER' ],
+              match: 'round_robin',
+              cycle: 'mirror_invert',
+              // sayPartner: false
+              // skipBye: false,
+
+          },
+          cb: function() {
+              node.once.data('done', function(msg) {
+                  var offer, observer;
+                  offer = msg.data.offer;
+
+                  observer = node.game.matcher.getMatchFor(msg.from);
+                  // Send the decision to the other player.
+                  node.say('decision', observer, msg.data.offer);
+
+              });
+              console.log('Game round: ' + node.player.stage.round);
+          }
+      });
+
+    stager.extendStep('irgame2', {
         matcher: {
-            roles: [ 'DICTATOR', 'OBSERVER' ],
+            roles: [ 'DONOR', 'RECEIVER' ],
             match: 'round_robin',
             cycle: 'mirror_invert',
-            sayPartner: false
+            // sayPartner: false
             // skipBye: false,
 
         },
@@ -42,15 +71,6 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
             node.once.data('done', function(msg) {
                 var offer, observer;
                 offer = msg.data.offer;
-
-                // Validate incoming offer.
-                if (false === J.isInt(offer, 0, 100)) {
-                    console.log('Invalid offer received from ' + msg.from);
-                    // If dictator is cheating re-set his/her offer.
-                    msg.data.offer = settings.defaultOffer;
-                    // Mark the item as manipulated.
-                    msg.data.originalOffer = offer;
-                }
 
                 observer = node.game.matcher.getMatchFor(msg.from);
                 // Send the decision to the other player.
@@ -63,6 +83,7 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
 
     stager.extendStep('end', {
         cb: function() {
+            // Save data in the data/roomXXX directory.
             node.game.memory.save('data.json');
         }
     });
