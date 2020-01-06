@@ -1,6 +1,6 @@
 /**
  * # Player type implementation of the game stages
- * Copyright(c) 2019 LeoAlexLennart <>
+ * Copyright(c) 2020 LeoAlexanderLennart <>
  * MIT Licensed
  *
  * Each client type must extend / implement the stages defined in `game.stages`.
@@ -26,21 +26,13 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
             return node.JSUS.isInt(n, -1, 101);
         };
 
-        this.randomOffer = function(offer, submitOffer) {
-            var n;
-            n = J.randomInt(-1,100);
-            offer.value = n;
-            submitOffer.click();
-        };
-
         // Setup page: header + frame.
         header = W.generateHeader();
         frame = W.generateFrame();
 
         // Add widgets.
-        this.visualRound = node.widgets.append('VisualRound', header, {
-            title: false
-        });
+        this.visualRound = node.widgets.append('VisualRound', header);
+
         this.visualTimer = node.widgets.append('VisualTimer', header);
 
         this.doneButton = node.widgets.append('DoneButton', header);
@@ -53,32 +45,136 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
         frame: 'instructions.htm'
     });
 
-    stager.extendStep('game', {
+
+    stager.extendStep('pbgame', {
+        donebutton: false,
+        frame: 'pbgame.htm',
+        timer: settings.bidTime,
+        cb: function() {
+            var c_button, nc_button, offer;
+
+            W.getElementById('coop').style.display = '';
+            c_button = W.gid('c_submitOffer');
+            nc_button = W.gid('nc_submitOffer');
+
+            c_button.onclick = function() {
+                var decision;
+                  decision = 5;
+                node.done({ offer: decision });
+            },
+            nc_button.onclick = function() {
+                var decision;
+                  decision = 10;
+                node.done({ offer: decision });
+            };
+        },
+        timeup: function() {
+            W.gid('nc_submitOffer').click();
+        }
+      });
+
+// IR Game, observer -> recieve, and "dictator" -> donate
+stager.extendStep('irgame1', {
+    donebutton: false,
+    frame: 'game.htm',
+    roles: {
+        DONOR: {
+            timer: settings.bidTime,
+            cb: function() {
+                var button1, button2, offer;
+
+                // Make the dictator display visible.
+                W.getElementById('donor').style.display = '';
+                // W.gid = W.getElementById.
+                button1 = W.gid('submitOffer1');
+                button2 = W.gid('submitOffer2');
+
+                // Listen on click event.
+                button1.onclick = function() {
+                    var decision;
+                      decision = 0;
+                    node.done({ offer: decision });
+                };
+
+                button2.onclick = function() {
+                    var decision;
+                      decision = 2.5;
+                    node.done({ offer: decision });
+                };
+            },
+            timeup: function() {
+                W.gid('submitOffer1').click();
+            }
+        },
+        RECEIVER: {
+            cb: function() {
+                var span, div, dotsObj;
+
+                // Make the observer display visible.
+                div = W.getElementById('receiver').style.display = '';
+                span = W.getElementById('dots');
+                dotsObj = W.addLoadingDots(span);
+
+                node.on.data('decision', function(msg) {
+                    dotsObj.stop();
+                    W.setInnerHTML('waitingFor', 'Decision arrived: ');
+                    W.setInnerHTML('decision',
+                                   'The donor offered: ' +
+                                   msg.data + ' ECU.');
+
+                    setTimeout(function() {
+                        node.done();
+                    }, 10000);
+                });
+            }
+        }
+    }
+});
+
+stager.extendStep('irgame2', {
         donebutton: false,
         frame: 'game.htm',
         roles: {
-            DICTATOR: {
+            DONOR: {
                 timer: settings.bidTime,
                 cb: function() {
-                    var button, offer, div;
+                    var button1, button2, offer;
 
                     // Make the dictator display visible.
-                    div = W.getElementById('dictator').style.display = '';
-                    button = W.getElementById('submitOffer');
-                    offer =  W.getElementById('offer');
+                    W.getElementById('donor').style.display = '';
+                    // W.gid = W.getElementById.
+                    button1 = W.gid('submitOffer1');
+                    button2 = W.gid('submitOffer2');
 
                     // Listen on click event.
-                    button.onclick = function() {
+                    button1.onclick = function() {
                         var decision;
+                          decision = 0;
+                       // Validate offer.
+                      //  decision = node.game.isValidBid(offer.value);
+                      //  if ('number' !== typeof decision) {
+                      //      W.writeln('Please enter a number between ' +
+                      //                '0 and 100.', 'dictator');
+                      //      return;
+                      //  }
+                      //  button.disabled = true;
 
-                        // Validate offer.
-                        decision = node.game.isValidBid(offer.value);
-                        if ('number' !== typeof decision) {
-                            W.writeln('Please enter a number between ' +
-                                      '0 and 100.', 'dictator');
-                            return;
-                        }
-                        button.disabled = true;
+                        // Mark the end of the round, and
+                        // store the decision in the server.
+                        node.done({ offer: decision });
+                    };
+
+                    button2.onclick = function() {
+                        var decision;
+                          decision = 2.5;
+                       // Validate offer.
+                      //  decision = node.game.isValidBid(offer.value);
+                      //  if ('number' !== typeof decision) {
+                      //      W.writeln('Please enter a number between ' +
+                      //                '0 and 100.', 'dictator');
+                      //      return;
+                      //  }
+                      //  button.disabled = true;
 
                         // Mark the end of the round, and
                         // store the decision in the server.
@@ -86,16 +182,21 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
                     };
                 },
                 timeup: function() {
-                    node.game.randomOffer(W.getElementById('offer'),
-                                          W.getElementById('submitOffer'));
+                    //var n;
+                    // Generate random value.
+                    //n = 0;
+                    // Set value in the input box.
+                    //W.gid('offer').value = n;
+                    // Click the submit button to trigger the event listener.
+                    W.gid('submitOffer1').click();
                 }
             },
-            OBSERVER: {
+            RECEIVER: {
                 cb: function() {
                     var span, div, dotsObj;
 
                     // Make the observer display visible.
-                    div = W.getElementById('observer').style.display = '';
+                    div = W.getElementById('receiver').style.display = '';
                     span = W.getElementById('dots');
                     dotsObj = W.addLoadingDots(span);
 
@@ -103,15 +204,17 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
                         dotsObj.stop();
                         W.setInnerHTML('waitingFor', 'Decision arrived: ');
                         W.setInnerHTML('decision',
-                                       'The dictator offered: ' +
+                                       'The donor offered: ' +
                                        msg.data + ' ECU.');
 
-                        node.timer.randomDone();
+                        setTimeout(function() {
+                            node.done();
+                        }, 10000);
                     });
                 }
             }
         }
-    });
+});
 
     stager.extendStep('end', {
         donebutton: false,
