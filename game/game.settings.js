@@ -1,6 +1,6 @@
 /**
  * # Game settings definition file
- * Copyright(c) 2019 LeoAlexLennart <>
+ * Copyright(c) 2020 LeoAlexanderLennart <>
  * MIT Licensed
  *
  * The variables in this file will be sent to each client and saved under:
@@ -35,11 +35,11 @@ module.exports = {
     // # Game specific properties
 
     // Number of game rounds repetitions.
-    REPEAT: 4,
+    REPEAT: 2,
 
     // In case an incoming offer does not pass validation, which indicates
     // cheating, re-set the dictator's offer to this value.
-    defaultOffer: 100,
+    //defaultOffer: 100,
 
     // # Treatments definition.
 
@@ -53,12 +53,12 @@ module.exports = {
 
         standard: {
             description: "Longer time",
-            bidTime: 30000
+            bidTime: 10000
         },
 
         pressure: {
             description: "Short times to take decisions",
-            bidTime: 10000
+            bidTime: 5000
         }
 
     }
