@@ -32,6 +32,64 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
     stager.extendStep('pbgame', {
       cb: function() {
         console.log('PBgame.');
+        function MoneyTalks(options) {
+
+            /**
+             * ### MoneyTalks.spanCurrency
+             *
+             * The SPAN which holds information on the currency
+             */
+            this.spanCurrency = 10;
+
+            /**
+             * ### MoneyTalks.spanMoney
+             *
+             * The SPAN which holds information about the money earned so far
+             */
+            this.spanMoney = null;
+
+            /**
+             * ### MoneyTalks.currency
+             *
+             * String describing the currency
+             */
+            this.currency = 'ECU';
+
+            /**
+             * ### MoneyTalks.money
+             *
+             * Currently earned money
+             */
+            this.money = 0;
+
+            /**
+             * ### MoneyTalks.precicison
+             *
+             * Precision of floating point number to display
+             */
+            this.precision = 2;
+
+            /**
+             * ### MoneyTalks.showCurrency
+             *
+             * If TRUE, the currency is displayed after the money
+             */
+            this.showCurrency = true;
+
+            /**
+             * ### MoneyTalks.currencyClassname
+             *
+             * Class name to be attached to the currency span
+             */
+            this.classnameCurrency = 'moneytalkscurrency';
+
+            /**
+             * ### MoneyTalks.currencyClassname
+             *
+             * Class name to be attached to the money span
+             */
+            this.classnameMoney = 'moneytalksmoney';
+        }
       }
     });
 
