@@ -37,8 +37,10 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
 
         this.doneButton = node.widgets.append('DoneButton', header);
 
+        this.MoneyTalks = node.widgets.append('MoneyTalks', header);
+
         // Additional debug information while developing the game.
-        // this.debugInfo = node.widgets.append('DebugInfo', header)
+        this.debugInfo = node.widgets.append('DebugInfo', header)
     });
 
     stager.extendStep('instructions', {
@@ -47,9 +49,9 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
 
 
     stager.extendStep('pbgame', {
-        donebutton: false,
+        donebutton: true,
         frame: 'pbgame.htm',
-        timer: settings.bidTime,
+      //  timer: settings.bidTime,
         cb: function() {
             var c_button, nc_button, offer;
 
@@ -61,25 +63,31 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
                 var decision;
                   decision = 5;
                 node.done({ offer: decision });
+                moneyTalks.update(5, clear);
             },
             nc_button.onclick = function() {
                 var decision;
                   decision = 10;
                 node.done({ offer: decision });
+                moneyTalks.update(10, clear);
             };
-        },
-        timeup: function() {
+
+            },
+
+
+            timeup: function() {
             W.gid('nc_submitOffer').click();
-        }
+        },
+
       });
 
 // IR Game, observer -> recieve, and "dictator" -> donate
 stager.extendStep('irgame1', {
-    donebutton: false,
+    donebutton: true,
     frame: 'game.htm',
     roles: {
         DONOR: {
-            timer: settings.bidTime,
+            //timer: settings.bidTime,
             cb: function() {
                 var button1, button2, offer;
 
@@ -132,11 +140,11 @@ stager.extendStep('irgame1', {
 });
 
 stager.extendStep('irgame2', {
-        donebutton: false,
+        donebutton: true,
         frame: 'game.htm',
         roles: {
             DONOR: {
-                timer: settings.bidTime,
+                //timer: settings.bidTime,
                 cb: function() {
                     var button1, button2, offer;
 
@@ -224,3 +232,4 @@ stager.extendStep('irgame2', {
         }
     });
 };
+
