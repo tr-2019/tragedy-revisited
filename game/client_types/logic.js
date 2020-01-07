@@ -29,9 +29,27 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
         }
     });
 
+var earnings;
+
     stager.extendStep('pbgame', {
       cb: function() {
         console.log('PBgame.');
+
+
+      node.game.memory.on('insert', function(item){
+          storeData({ data: item.offer });
+      });
+
+      node.game.memory.save('results1.json');
+
+
+  /**    node.game.pl.each(function(player) {
+          // Get the value saved in the registry, and send it.
+          var cumulativeFishing = channel.registry.getClient(player.id).win;
+          node.say('WIN', player.id, cumulativeFishing);
+      });
+    */
+
         function MoneyTalks(options) {
 
             /**
