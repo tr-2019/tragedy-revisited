@@ -49,6 +49,8 @@ module.exports = {
     // If the `treatments` object is missing a treatment named _standard_
     // will be created automatically, and will contain all variables.
 
+    poolsize: 80,
+
     treatments: {
 
         standard: {
