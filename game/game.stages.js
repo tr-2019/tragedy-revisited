@@ -13,10 +13,16 @@ module.exports = function(stager, settings) {
 
      stager
         .stage('instructions')
-        .repeatStage('player', 6)
-        .step('pbgame')
-        .step('irgame1')
-        .step('irgame2')
+          .step('instructions1')
+          .step('instructions2')
+        .stage('quiz')
+        .repeatStage('player', 2)
+          .step('pbgame')
+          .step('irgame1')
+          .step('irgame2')
+        .stage('feedback')
+          .step('feedback1')
+          .step('feedback2')
         .stage('end')
         .gameover();
 
