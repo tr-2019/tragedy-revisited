@@ -47,17 +47,17 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
     stager.extendStep('pbgame_results', {
             cb: function() {
                 var playerIds = [];
-                var p1Id, p2Id, p3Id;
-                var p1Choice, p2Choice, p3Choice;
-                var p1Payoff, p2Payoff, p3Payoff;
+                var p1Id, p2Id/**, p3Id*/;
+                var p1Choice, p2Choice/**, p3Choice*/;
+                var p1Payoff, p2Payoff/**, p3Payoff*/;
 
                 playerIds = Object.keys(node.game.history);
                 p1Id = playerIds[0];
                 p2Id = playerIds[1];
-                p3Id = playerIds[2];
+                /**p3Id = playerIds[2];*/
                 p1Choice = getRecentChoice(p1Id, node.game.history);
                 p2Choice = getRecentChoice(p2Id, node.game.history);
-                p3Choice = getRecentChoice(p3Id, node.game.history);
+                /** p3Choice = getRecentChoice(p3Id, node.game.history);*/
 
                 if ('DEFECT' === p1Choice) {
                     p1Payoff = 10;
@@ -71,21 +71,21 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
                 else {
                     p2Payoff = 5;
                 }
-                if ('DEFECT' === p3Choice) {
+               /** if ('DEFECT' === p3Choice) {
                     p3Payoff = 10;
                 }
                 else {
                     p3Payoff = 5;
-                }
+                } */
                 addCoins(p1Id, p1Payoff, node.game.history);
                 addCoins(p2Id, p2Payoff, node.game.history);
-                addCoins(p3Id, p3Payoff, node.game.history);
-                sendToClient(p1Id, p1Payoff, p2Payoff, p2Choice, p3Payoff, p3Choice);
-                sendToClient(p2Id, p2Payoff, p1Payoff, p1Choice, p3Payoff, p3Choice);
-                sendToClient(p3Id, p3Payoff, p2Payoff, p2Choice, p1Payoff, p1Choice);
+               /** addCoins(p3Id, p3Payoff, node.game.history); */
+                sendToClient(p1Id, p1Payoff, p2Payoff, p2Choice/**, p3Payoff, p3Choice*/);
+                sendToClient(p2Id, p2Payoff, p1Payoff, p1Choice/**, p3Payoff, p3Choice);
+                /** sendToClient(p3Id, p3Payoff, p2Payoff, p2Choice, p1Payoff, p1Choice); */
                 updateWin(p1Id, p1Payoff);
                 updateWin(p2Id, p2Payoff);
-                updateWin(p3Id, p3Payoff);
+               /** updateWin(p3Id, p3Payoff); */
             }
         });
 
