@@ -60,8 +60,9 @@ module.exports = {
 
         pressure: {
             description: "Short times to take decisions",
-            bidTime: 5000
+            bidTime: 10000
         }
 
     }
 };
+
