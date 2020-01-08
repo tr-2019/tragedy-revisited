@@ -165,12 +165,12 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
       stager.extendStep('pbgame_results', {
               donebutton: true,
               cb: function() {
-                  var myEarning, otherEarning, myBank, otherChoice;
+                  var myEarning, totalFish, myBank, otherChoice;
                   node.on.data('pbgame_results', function(msg) {
                       myEarning = msg.data.myEarning;
                       W.setInnerHTML('myearning', myEarning);
-                      otherEarning = msg.data.otherEarning;
-                      W.setInnerHTML('otherearning', otherEarning);
+                      totalFish = msg.data.totalFish;
+                      W.setInnerHTML('totalFish', totalFish);
                       myBank = msg.data.myBank;
                       W.setInnerHTML('mybank', myBank);
                       otherChoice = msg.data.otherChoice;
@@ -380,4 +380,3 @@ stager.extendStep('feedback2', {
         }
     });
 };
-
