@@ -12,19 +12,33 @@
  */
 
 "use strict";
+//dunno yo
+var ngc = require('nodegame-client');
+var Stager = ngc.Stager;
+var stepRules = ngc.stepRules;
+var constants = ngc.constants;
 
 module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
+
+  // var cbs;
+  var channel = gameRoom.channel;
+  var node = gameRoom.node;
+
+  // Import other functions used in the game.
+  //cbs = require('C:/Users/Lennart/Desktop/nodegame-v5.4.0-dev/games_available/tragedy/game/client_types/includes/player.callbacks.js');
+
+  // Specify init function, and extend steps.
+
+  // Init callback.
+  // stager.setOnInit(cbs.init);
+
+
 
     stager.setOnInit(function() {
 
         // Initialize the client.
 
         var header, frame;
-
-        // Bid is valid if it is a number between 0 and 100.
-        this.isValidBid = function(n) {
-            return node.JSUS.isInt(n, -1, 101);
-        };
 
         // Setup page: header + frame.
         header = W.generateHeader();
@@ -37,13 +51,13 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
 
         this.doneButton = node.widgets.append('DoneButton', header);
 
-        this.MoneyTalks = node.widgets.append('MoneyTalks', header);
+        //this.MoneyTalks = node.widgets.append('MoneyTalks', header);
 
         // Additional debug information while developing the game.
     //    this.debugInfo = node.widgets.append('DebugInfo', header)
     });
 
-    stager.extendStep('instructions1', {
+  stager.extendStep('instructions1', {
         frame: 'instructions1.htm'
     });
 
@@ -96,14 +110,15 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
         }
     });
 
-    stager.extendStep('pbgame', {
+    stager.extendStep('pbgame_respond', {
         donebutton: false,
         frame: 'pbgame.htm',
-      //  timer: settings.bidTime,
+        timer: settings.bidTime,
         cb: function() {
-            var c_button, nc_button, offer;
-
             W.getElementById('coop').style.display = '';
+
+          /**  var c_button, nc_button, offer;
+
             c_button = W.gid('c_submitOffer');
             nc_button = W.gid('nc_submitOffer');
 
@@ -116,9 +131,22 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
                 var decision;
                   decision = 10;
                 node.done({ offer: decision });
-            };
+            }; */
 
-            },
+
+          // button options
+          var c_button,nc_button;
+
+          c_button = W.getElementById('c_submitOffer');
+          nc_button = W.getElementById('nc_submitOffer');
+          c_button.onclick = function() {
+              node.done({ choice: 'COOPERATE' });
+          };
+          nc_button.onclick = function() {
+              node.done({ choice: 'DEFECT' });
+          }
+        },
+
 /**
             widget: function() {
               var earnings, offer;
@@ -132,8 +160,29 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
             timeup: function() {
             W.gid('nc_submitOffer').click();
         },
-
       });
+
+      stager.extendStep('pbgame_results', {
+              donebutton: true,
+              cb: function() {
+                  var myEarning, otherEarning, myBank, otherChoice;
+                  node.on.data('pbgame_results', function(msg) {
+                      myEarning = msg.data.myEarning;
+                      W.setInnerHTML('myearning', myEarning);
+                      otherEarning = msg.data.otherEarning;
+                      W.setInnerHTML('otherearning', otherEarning);
+                      myBank = msg.data.myBank;
+                      W.setInnerHTML('mybank', myBank);
+                      otherChoice = msg.data.otherChoice;
+                      if (otherChoice) {
+                          W.setInnerHTML('otherchoice', otherChoice);
+                      }
+                  });
+              },
+              frame: "results.htm"
+          });
+
+
 
 // IR Game, observer -> recieve, and "dictator" -> donate
 stager.extendStep('irgame1', {
@@ -331,3 +380,4 @@ stager.extendStep('feedback2', {
         }
     });
 };
+
