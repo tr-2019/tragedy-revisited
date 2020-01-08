@@ -16,7 +16,7 @@ module.exports = function(stager, settings) {
           .step('instructions1')
           .step('instructions2')
         .stage('quiz')
-        .repeatStage('player', 6)
+        .repeatStage('player', 1)
         .stage('feedback')
           .step('feedback1')
           .step('feedback2')
@@ -33,7 +33,8 @@ module.exports = function(stager, settings) {
  });
 
     // Modify the stager to skip one stage.
-    // stager.skip('instructions');
+    stager.skip('instructions');
+    stager.skip('quiz');
 
     // To skip a step within a stage use:
     // stager.skip('stageName', 'stepName');
