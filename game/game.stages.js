@@ -16,15 +16,21 @@ module.exports = function(stager, settings) {
           .step('instructions1')
           .step('instructions2')
         .stage('quiz')
-        .repeatStage('player', 2)
-          .step('pbgame')
-          .step('irgame1')
-          .step('irgame2')
+        .repeatStage('player', 6)
         .stage('feedback')
           .step('feedback1')
           .step('feedback2')
         .stage('end')
         .gameover();
+
+  stager.extendStage('player', {
+     steps: [
+       'pbgame_respond',
+       'pbgame_results',
+       'irgame1',
+       'irgame2'
+     ]
+ });
 
     // Modify the stager to skip one stage.
     // stager.skip('instructions');
