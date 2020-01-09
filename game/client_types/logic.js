@@ -42,8 +42,8 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
                 id = msg.from;
                 addToHistory(id, msg.data.choice, node.game.history);
             });
-            var pid, payoff, sumPayoff;
-            sendToClient(pid, payoff, sumPayoff, sumPool);
+            /**var pid, payoff, sumPayoff;
+            sendToClient(pid, payoff, sumPayoff, sumPool); */
         }
     });
 
@@ -67,7 +67,9 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
                 else {
                     payoff = 5;
                 }
+                //earnings by every player each round
                 sumPayoff += payoff;
+                //earnings by every player overall
                 sumPool -= payoff;
                 addCoins(pid, payoff, node.game.history);
                 updateWin(pid, payoff);
@@ -98,8 +100,20 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
             node.game.offers = [];
 
             node.on.data('done', function(msg) {
-                var offer, observer;
-                offer = msg.data.offer;
+                var id, offer, observer;
+
+                if(msg.data.offer === 2.5) {
+                  offer = msg.data.offer + 1.5;
+                }
+                else{
+                  offer = 0
+                }
+
+                var n_payoff;
+                n_payoff = 5;
+                n_payoff -= msg.data.offer;
+                addCoins(id, n_payoff, node.game.history);
+debugger;
 
                 observer = node.game.matcher.getMatchFor(msg.from);
 
@@ -158,9 +172,9 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
             totalPool: pool
         });
 
-        node.say("pbgame_respond", id, {
+      /**  node.say("pbgame_respond", id, {
             totalPool: pool
-        });
+        }); */
         //node.say("myEarning", id, myPayoff);
         //node.say("otherEarning", id, otherPayoff);
         //node.say("myBank", id, getBankTotal(id, node.game.history));
