@@ -16,7 +16,7 @@ module.exports = function(stager, settings) {
           .step('instructions1')
           .step('instructions2')
         .stage('quiz')
-        .repeatStage('player', 1)
+        .repeatStage('player', 2)
         .stage('feedback')
           .step('feedback1')
           .step('feedback2')
