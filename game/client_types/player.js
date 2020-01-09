@@ -24,16 +24,6 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
     var channel = gameRoom.channel;
     var node = gameRoom.node;
 
-    // Import other functions used in the game.
-    //cbs = require('C:/Users/Lennart/Desktop/nodegame-v5.4.0-dev/games_available/tragedy/game/client_types/includes/player.callbacks.js');
-
-    // Specify init function, and extend steps.
-
-    // Init callback.
-    // stager.setOnInit(cbs.init);
-
-
-
     stager.setOnInit(function() {
 
         // Initialize the client.
@@ -55,7 +45,7 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
             title: 'My Earnings: ',
             currency: ' Fish',
             money: 0,
-            precision: 0,
+            precision: 1,
         });
 
         // Additional debug information while developing the game.
@@ -140,16 +130,6 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
             }
         },
 
-        /**
-           widget: function() {
-           var earnings, offer;
-
-           if c_button.onclick = TRUE {
-           earnings = money + offer
-
-           }
-
-        */
         timeup: function() {
             W.gid('nc_submitOffer').click();
         },
@@ -224,7 +204,7 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
         frame: 'irgame_results.htm',
         cb: function() {
             var span, div, dotsObj;
-            var myEarning;
+            var myEarning, myLoss;
             // Make the observer display visible.
             div = W.getElementById('receiver').style.display = '';
             span = W.getElementById('dots');
@@ -232,17 +212,21 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
 
             node.on.data('decision', function(msg) {
                 dotsObj.stop();
-                W.setInnerHTML('waitingFor', 'Your partner //id\\ ' + 'made a decision!');
+                W.setInnerHTML('waitingFor', 'Your partner ' + msg.data.from + ' made a decision!');
                 W.setInnerHTML('decision',
                                'Your partner offered: ' +
                                msg.data.donation + ' fish.');
                 myEarning = msg.data.donation;
-
                 // Display from
-
                 // If an history is in msg.data, display history.
-
                 this.MoneyTalks.update(myEarning);
+
+            });
+
+            node.on.data('loss', function(msg) {
+              myLoss = 0;
+              myLoss = msg.data.loss * (-1);
+              this.MoneyTalks.update(myLoss);
             });
 
 
