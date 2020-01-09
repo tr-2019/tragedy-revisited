@@ -51,7 +51,12 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
 
         this.doneButton = node.widgets.append('DoneButton', header);
 
-        //this.MoneyTalks = node.widgets.append('MoneyTalks', header);
+        this.MoneyTalks = node.widgets.append('MoneyTalks', header, {
+            title: 'My Earnings: ',
+            currency: ' Fish',
+            money: 0,
+            precision: 0,
+        });
 
         // Additional debug information while developing the game.
         //    this.debugInfo = node.widgets.append('DebugInfo', header)
@@ -167,7 +172,8 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
                 otherChoice = msg.data.otherChoice;
                 if (otherChoice) {
                     W.setInnerHTML('otherchoice', otherChoice);
-                }
+                };
+                this.MoneyTalks.update(myEarning);
 
             });
         },
@@ -215,9 +221,10 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
 
     stager.extendStep('irgame2', {
         donebutton: true,
-        frame: 'game.htm',
+        frame: 'irgame_results.htm',
         cb: function() {
             var span, div, dotsObj;
+            var myEarning;
             // Make the observer display visible.
             div = W.getElementById('receiver').style.display = '';
             span = W.getElementById('dots');
@@ -225,17 +232,20 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
 
             node.on.data('decision', function(msg) {
                 dotsObj.stop();
-                W.setInnerHTML('waitingFor', 'Decision arrived: ');
+                W.setInnerHTML('waitingFor', 'Your partner //id\\ ' + 'made a decision!');
                 W.setInnerHTML('decision',
-                               'The donor offered: ' +
-                               msg.data.donation + ' ECU.');
+                               'Your partner offered: ' +
+                               msg.data.donation + ' fish.');
+                myEarning = msg.data.donation;
 
                 // Display from
 
                 // If an history is in msg.data, display history.
 
-
+                this.MoneyTalks.update(myEarning);
             });
+
+
         }
     });
 
