@@ -117,23 +117,11 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
         cb: function() {
             W.getElementById('coop').style.display = '';
 
-            /**  var c_button, nc_button, offer;
-
-                 c_button = W.gid('c_submitOffer');
-                 nc_button = W.gid('nc_submitOffer');
-
-                 c_button.onclick = function() {
-                 var decision;
-                 decision = 5;
-                 node.done({ offer: decision });
-                 },
-                 nc_button.onclick = function() {
-                 var decision;
-                 decision = 10;
-                 node.done({ offer: decision });
-                 }; */
-
-
+          var totalPool;
+          node.on.data('pbgame_respond', function(msg) {
+            totalPool = msg.data.totalPool;
+            W.setInnerHTML('totalPool', totalPool);
+          });
             // button options
             var c_button,nc_button;
 
@@ -164,8 +152,9 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
 
     stager.extendStep('pbgame_results', {
         donebutton: true,
+        timer: settings.bidTime,
         cb: function() {
-            var myEarning, totalFish, myBank, otherChoice;
+            var myEarning, totalFish, myBank, otherChoice, totalPool;
             node.on.data('pbgame_results', function(msg) {
                 myEarning = msg.data.myEarning;
                 W.setInnerHTML('myearning', myEarning);
@@ -173,12 +162,20 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
                 W.setInnerHTML('totalFish', totalFish);
                 myBank = msg.data.myBank;
                 W.setInnerHTML('mybank', myBank);
+                totalPool = msg.data.totalPool;
+                W.setInnerHTML('totalPool', totalPool);
                 otherChoice = msg.data.otherChoice;
                 if (otherChoice) {
                     W.setInnerHTML('otherchoice', otherChoice);
                 }
+
             });
         },
+
+        timeup: function() {
+            W.gid('DoneButton').click();
+        },
+
         frame: "results.htm"
     });
 
@@ -187,7 +184,7 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
     // IR Game, observer -> recieve, and "dictator" -> donate
     stager.extendStep('irgame1', {
         donebutton: false,
-        frame: 'game.htm',        
+        frame: 'game.htm',
         //timer: settings.bidTime,
         cb: function() {
             var button1, button2, offer;
@@ -213,7 +210,7 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
         },
         timeup: function() {
             W.gid('submitOffer1').click();
-        }                   
+        }
     });
 
     stager.extendStep('irgame2', {
@@ -237,9 +234,9 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
 
                 // If an history is in msg.data, display history.
 
-                
+
             });
-        }            
+        }
     });
 
     stager.extendStep('feedback1', {
