@@ -42,8 +42,6 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
                 id = msg.from;
                 addToHistory(id, msg.data.choice, node.game.history);
             });
-            /**var pid, payoff, sumPayoff;
-            sendToClient(pid, payoff, sumPayoff, sumPool); */
         }
     });
 
@@ -95,26 +93,20 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
             // skipBye: false,
         },
         cb: function() {
-
             // Creating a new object every round.
             node.game.offers = [];
+            node.game.offers_um = [];
 
-            node.on.data('done', function(msg) {
-                var id, offer, observer;
+                node.on.data('done', function(msg) {
+                  var offer;
+                  if (msg.data.offer === 2.5) {
+                      offer = msg.data.offer + 1.5;
+                  }
+                  else {
+                      offer = 0;
+                  }
 
-                if(msg.data.offer === 2.5) {
-                  offer = msg.data.offer + 1.5;
-                }
-                else{
-                  offer = 0
-                }
-
-                var n_payoff;
-                n_payoff = 5;
-                n_payoff -= msg.data.offer;
-                addCoins(id, n_payoff, node.game.history);
-debugger;
-
+                var observer;
                 observer = node.game.matcher.getMatchFor(msg.from);
 
                 node.game.offers.push({
@@ -123,7 +115,13 @@ debugger;
                     from: msg.from
                 });
 
-            });
+                node.game.offers_um.push({
+                  donation_um: msg.data.offer
+                });
+
+                //neeeeeeed?!
+                var id = msg.from;
+           });
             console.log('Game round: ' + node.player.stage.round);
         }
     });
@@ -131,14 +129,25 @@ debugger;
     stager.extendStep('irgame2', {
         // maybe matcher here too.
         cb: function() {
-            var i, len, receiver, data;
+            var i, pid, len, receiver, data, data_um;
+            var playerIds = [];
             len = node.game.offers.length;
+            playerIds = Object.keys(node.game.history);
             for (i=0 ; i < len ; i++) {
+                pid = playerIds[i];
                 receiver = node.game.offers[i].receiver;
                 data = {
                     from: node.game.offers[i].from,
                     donation: node.game.offers[i].donation
                 };
+                // unmainpulated offer send to own pool
+                data_um = 0;
+                data_um = {loss: node.game.offers_um[i].donation_um};
+
+                addCoins(pid, data.donation, node.game.history);
+                addCoins(pid, data_um, node.game.history);
+
+
 
                 if (treatmentName === 'XXX') {
                     // data.history = history_you_saved;
@@ -147,6 +156,7 @@ debugger;
 
                 // Send the decision to each player.
                 node.say('decision', receiver, data);
+                node.say('loss', pid, data_um);
             }
 
             console.log('Game round: ' + node.player.stage.round);
@@ -171,10 +181,6 @@ debugger;
             myBank: getBankTotal(id, node.game.history),
             totalPool: pool
         });
-
-      /**  node.say("pbgame_respond", id, {
-            totalPool: pool
-        }); */
         //node.say("myEarning", id, myPayoff);
         //node.say("otherEarning", id, otherPayoff);
         //node.say("myBank", id, getBankTotal(id, node.game.history));
@@ -200,6 +206,15 @@ debugger;
         }
         history[id].choices.push(choice);
         console.log(id + choice);
+    }
+
+    // appends the player's choice to history data
+    function addToHistory2(id, myDecision, history) {
+      if (!history[id]) {
+          history[id].myDecision = [];
+      }
+        history[id].myDecision.push(myDecision);
+        console.log(id + myDecision);
     }
 
     // retrieves the player's most recent choice
