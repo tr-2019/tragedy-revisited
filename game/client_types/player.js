@@ -212,6 +212,8 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
 
             node.on.data('decision', function(msg) {
                 dotsObj.stop();
+                W.setInnerHTML('ownDecision_id', 'My id is: ' + msg.data.receiver);
+
                 W.setInnerHTML('waitingFor', 'Your partner ' + msg.data.from + ' made a decision!');
                 W.setInnerHTML('decision',
                                'Your partner offered: ' +
@@ -224,6 +226,7 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
             });
 
             node.on.data('loss', function(msg) {
+              W.setInnerHTML('owndecision', 'I made this decision: ' + msg.data.loss);
               myLoss = 0;
               myLoss = msg.data.loss * (-1);
               this.MoneyTalks.update(myLoss);
