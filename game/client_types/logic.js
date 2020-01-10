@@ -98,12 +98,14 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
             node.game.offers_um = [];
 
                 node.on.data('done', function(msg) {
-                  var offer;
+                  var offer, offer2;
                   if (msg.data.offer === 2.5) {
                       offer = msg.data.offer + 1.5;
+                      offer2 = msg.data.offer;
                   }
                   else {
                       offer = 0;
+                      offer2 = 0;
                   }
 
                 var observer;
@@ -116,11 +118,8 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
                 });
 
                 node.game.offers_um.push({
-                  donation_um: msg.data.offer
+                  donation_um: offer2
                 });
-
-                //neeeeeeed?!
-                var id = msg.from;
            });
             console.log('Game round: ' + node.player.stage.round);
         }
@@ -138,7 +137,9 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
                 receiver = node.game.offers[i].receiver;
                 data = {
                     from: node.game.offers[i].from,
-                    donation: node.game.offers[i].donation
+                    donation: node.game.offers[i].donation,
+                    receiver: node.game.offers[i].receiver,
+                    loss: node.game.offers_um[i].donation_um
                 };
                 // unmainpulated offer send to own pool
                 data_um = 0;
