@@ -38,7 +38,6 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
             ++ node.game.round;
             node.on.data('done', function (msg) {
                 var id;
-
                 id = msg.from;
                 addToHistory(id, msg.data.choice, node.game.history);
             });
@@ -88,7 +87,7 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
         matcher: {
             // roles: [ 'DONOR', 'RECEIVER' ],
             match: 'round_robin',
-            cycle: 'mirror_invert',
+            cycle: 'repeat',
             // sayPartner: false
             // skipBye: false,
         },
@@ -97,8 +96,40 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
             node.game.offers = [];
             node.game.offers_um = [];
 
+
+              var choice, observer;
+              var i, pid;
+              var playerIds = [];
+              playerIds = Object.keys(node.game.history);
+
+            if (treatmentName === 'pressure') {
+                  // data.history = history_you_saved;
+                  // history[id].choices
+              for (i = 0; i < playerIds.length; i++) {
+                pid = playerIds[i];
+                observer = node.game.matcher.getMatchFor(pid);
+                choice = { lastd: getRecentChoice(pid, node.game.history),
+                            from: pid};
+                if ('DEFECT' === choice.lastd) {
+                  choice.lastd = 10;
+                }
+                else {
+                  choice.lastd = 5;
+                }
+                node.say('history', observer, choice);
+              };
+            };
+
+
                 node.on.data('done', function(msg) {
+                  var observer;
+                  var pid, playerIds;
                   var offer, offer2;
+
+                  observer = node.game.matcher.getMatchFor(msg.from);
+
+
+
                   if (msg.data.offer === 2.5) {
                       offer = msg.data.offer + 1.5;
                       offer2 = msg.data.offer;
@@ -107,9 +138,6 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
                       offer = 0;
                       offer2 = 0;
                   }
-
-                var observer;
-                observer = node.game.matcher.getMatchFor(msg.from);
 
                 node.game.offers.push({
                     donation: offer,
@@ -147,13 +175,6 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
 
                 addCoins(pid, data.donation, node.game.history);
                 addCoins(pid, data_um, node.game.history);
-
-
-
-                if (treatmentName === 'XXX') {
-                    // data.history = history_you_saved;
-                    // history[id].choices
-                }
 
                 // Send the decision to each player.
                 node.say('decision', receiver, data);
