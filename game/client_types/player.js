@@ -174,9 +174,21 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
         //timer: settings.bidTime,
         cb: function() {
             var button1, button2, offer;
-
+            var span, div, dotsObj;
             // Make the dictator display visible.
-            W.getElementById('donor').style.display = '';
+            div = W.getElementById('receiver').style.display = '';
+            span = W.getElementById('dots');
+
+
+
+            //dotsObj = W.addLoadingDots(span);
+            node.on.data('history', function(msg) {
+              //dotsObj.stop();
+              W.setInnerHTML('meeting', 'You meet person ' + msg.data.from + ' at the fish market.');
+              W.setInnerHTML('pbgdecision', 'And you have heard from your colleagues that he/she has fished ' + msg.data.lastd + ' fish.')
+          });
+
+          W.setInnerHTML('blah', 'blah blah blah');
             // W.gid = W.getElementById.
             button1 = W.gid('submitOffer1');
             button2 = W.gid('submitOffer2');
