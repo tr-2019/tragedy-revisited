@@ -54,16 +54,16 @@ module.exports = {
     treatments: {
 
         standard: {
-            description: "Longer time",
-            bidTime: 10000
+            description: "NoHistory",
+            bidTime: 10000,
+
+
         },
 
         pressure: {
-            description: "Short times to take decisions",
+            description: "withHistory",
             bidTime: 10000
         }
 
     }
 };
-
-
