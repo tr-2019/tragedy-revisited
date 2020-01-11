@@ -20,6 +20,7 @@ module.exports = function(stager, settings) {
         .stage('feedback')
           .step('feedback1')
           .step('feedback2')
+        .stage('endpayoff')
         .stage('end')
         .gameover();
 
