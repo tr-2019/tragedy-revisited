@@ -113,7 +113,7 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
             W.getElementById('coop').style.display = '';
 
           var totalPool;
-          node.on.data('pbgame_respond', function(msg) {
+          node.on.data('leftfish', function(msg) {
             totalPool = msg.data.totalPool;
             W.setInnerHTML('totalPool', totalPool);
           });
@@ -179,16 +179,15 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
             div = W.getElementById('receiver').style.display = '';
             span = W.getElementById('dots');
 
-
-
-            //dotsObj = W.addLoadingDots(span);
             node.on.data('history', function(msg) {
-              //dotsObj.stop();
-              W.setInnerHTML('meeting', 'You meet person ' + msg.data.from + ' at the fish market.');
-              W.setInnerHTML('pbgdecision', 'And you have heard from your colleagues that he/she has fished ' + msg.data.lastd + ' fish.')
+              W.setInnerHTML('meeting', 'You meet person '
+              + msg.data.from + ' at the fish market.');
+              W.setInnerHTML('pbgdecision',
+              'And you have heard from your colleagues that' +
+              msg.data.from + 'has fished '
+               + msg.data.lastd + ' fish.')
           });
 
-          W.setInnerHTML('blah', 'blah blah blah');
             // W.gid = W.getElementById.
             button1 = W.gid('submitOffer1');
             button2 = W.gid('submitOffer2');
@@ -233,15 +232,15 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
                 myEarning = msg.data.donation;
                 // Display from
                 // If an history is in msg.data, display history.
-                this.MoneyTalks.update(myEarning);
+                node.game.MoneyTalks.update(myEarning);
 
             });
 
             node.on.data('loss', function(msg) {
-              W.setInnerHTML('owndecision', 'I made this decision: ' + msg.data.loss);
+              W.setInnerHTML('owndecision', 'I made this decision: ' + msg.data.loss * (-1));
               myLoss = 0;
-              myLoss = msg.data.loss * (-1);
-              this.MoneyTalks.update(myLoss);
+              myLoss = msg.data.loss; //* (-1);
+              node.game.MoneyTalks.update(myLoss);
             });
 
 
@@ -293,6 +292,29 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
             }
         }
     });
+
+    // EndScreen in a Widget Step at the end of the game.
+stager.extendStep('endpayoff', {
+    donebutton: false,
+    frame: 'end.htm',
+    widget: {
+        name: 'EndScreen',
+        root: "body",
+        options: {
+            title: false, // Disable title for seamless Widget Step.
+            panel: false, // No border around.
+            // showEmailForm: true,
+            showFeedbackForm: true,
+            email: {
+                texts: {
+                    label: 'Enter your email (optional):',
+                    errString: 'Please enter a valid email and retry'
+                }
+            },
+            feedback: { minLength: 0 }
+        }
+    }
+});
 
     stager.extendStep('end', {
         donebutton: false,
