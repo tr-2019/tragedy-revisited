@@ -114,9 +114,10 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
 
           var totalPool;
           node.on.data('leftfish', function(msg) {
-            totalPool = msg.data.totalPool;
+            totalPool = msg.data;
             W.setInnerHTML('totalPool', totalPool);
           });
+
             // button options
             var c_button,nc_button;
 
@@ -180,14 +181,16 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
             span = W.getElementById('dots');
 
             node.on.data('history', function(msg) {
-              W.setInnerHTML('meeting', 'You meet person '
+              W.setInnerHTML('meeting', 'You meet Player'
               + msg.data.from + ' at the fish market.');
               W.setInnerHTML('pbgdecision',
-              'And you have heard from your colleagues that' +
-              msg.data.from + 'has fished '
-               + msg.data.lastd + ' fish.')
+              'And you have heard from your colleagues that Player' +
+              msg.data.from + ' has fished '
+               + msg.data.lastd + ' fish in the last round.')
           });
-
+            node.on.data('nohistory', function(msg) {
+              W.setInnerHTML('nohistory', "You meet another anonymous player on the fish market. ")
+            });
             // W.gid = W.getElementById.
             button1 = W.gid('submitOffer1');
             button2 = W.gid('submitOffer2');
@@ -223,12 +226,11 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
 
             node.on.data('decision', function(msg) {
                 dotsObj.stop();
-                W.setInnerHTML('ownDecision_id', 'My id is: ' + msg.data.receiver);
 
-                W.setInnerHTML('waitingFor', 'Your partner ' + msg.data.from + ' made a decision!');
+              //  W.setInnerHTML('waitingFor', 'Your partner made a decision!');
                 W.setInnerHTML('decision',
-                               'Your partner offered: ' +
-                               msg.data.donation + ' fish.');
+                               'Another player decided to give ' +
+                               msg.data.donation + ' fish to you.');
                 myEarning = msg.data.donation;
                 // Display from
                 // If an history is in msg.data, display history.
@@ -237,11 +239,12 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
             });
 
             node.on.data('loss', function(msg) {
-              W.setInnerHTML('owndecision', 'I made this decision: ' + msg.data.loss * (-1));
+              W.setInnerHTML('owndecision', 'You decided to give: ' + msg.data.loss * (-1));
               myLoss = 0;
               myLoss = msg.data.loss; //* (-1);
               node.game.MoneyTalks.update(myLoss);
             });
+
 
 
         }
