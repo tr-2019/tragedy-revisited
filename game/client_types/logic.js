@@ -36,6 +36,16 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
     stager.extendStep('pbgame_respond', {
         cb: function() {
             ++ node.game.round;
+            
+            // sending the current pond size to all players. Finally working!
+            var restPool;
+            restPool = sumPool;
+
+            node.game.pl.each(function(player) {
+            node.say('leftfish', player.id, restPool)
+          });
+            
+            
             node.on.data('done', function (msg) {
                 var id;
                 id = msg.from;
