@@ -153,7 +153,7 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
                 if (otherChoice) {
                     W.setInnerHTML('otherchoice', otherChoice);
                 };
-                this.MoneyTalks.update(myEarning);
+                node.game.MoneyTalks.update(myEarning);
 
             });
         },
