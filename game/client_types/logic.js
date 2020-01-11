@@ -33,24 +33,21 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
     });
 
 
-    stager.extendStep('pbgame_respond', {
+       stager.extendStep('pbgame_respond', {
         cb: function() {
             ++ node.game.round;
-            
-            // sending the current pond size to all players. Finally working!
+
             var restPool;
             restPool = sumPool;
 
             node.game.pl.each(function(player) {
             node.say('leftfish', player.id, restPool)
           });
-            
-            
+
             node.on.data('done', function (msg) {
                 var id;
                 id = msg.from;
                 addToHistory(id, msg.data.choice, node.game.history);
-                node.say('leftfish', msg.from, msg.data.totalPool);
             });
         }
     });
@@ -120,6 +117,7 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
               var choice, observer;
               var i, pid;
               var playerIds = [];
+              var alias;
               playerIds = Object.keys(node.game.history);
 
             if (treatmentName === 'pressure') {
@@ -127,9 +125,13 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
                   // history[id].choices
               for (i = 0; i < playerIds.length; i++) {
                 pid = playerIds[i];
+
+                alias = i+1;
+
+
                 observer = node.game.matcher.getMatchFor(pid);
                 choice = { lastd: getRecentChoice(pid, node.game.history),
-                            from: pid};
+                            from: alias};
                 if ('DEFECT' === choice.lastd) {
                   choice.lastd = 10;
                 }
@@ -140,7 +142,11 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
               };
             };
 
-
+          if (treatmentName === 'standard') {
+            node.game.pl.each(function(player) {
+            node.say('nohistory', player.id)
+            });
+          };
                 node.on.data('done', function(msg) {
                   var observer;
                   var pid, playerIds;
@@ -166,6 +172,7 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
                 node.game.offers_um.push({
                   donation_um: offer2
                 });
+
            });
             console.log('Game round: ' + node.player.stage.round);
         }
