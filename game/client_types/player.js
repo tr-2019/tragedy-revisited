@@ -318,7 +318,7 @@ stager.extendStep('endpayoff', {
         }
     }
 });
-    
+
  stager.extendStep('endpayoff', {
     donebutton: false,
     frame: 'end.htm',
