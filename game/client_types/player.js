@@ -56,9 +56,19 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
         frame: 'instructions1.htm'
     });
 
-    stager.extendStep('instructions2', {
-        frame: 'instructions2.htm'
-    });
+      if (treatmentName === "standard") {
+          stager.extendStep('instructions2', {
+              frame: 'instructions_standard2.htm'
+          });
+      }
+
+      // Treatment = With history
+      else {
+        stager.extendStep('instructions2', {
+            frame: 'instructions2.htm'
+        });
+
+      }
 
     stager.extendStep('quiz', {
         widget: {
