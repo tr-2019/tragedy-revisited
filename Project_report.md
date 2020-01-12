@@ -30,18 +30,11 @@ We tried to make our design as robust as possible by staying close to the method
 The most important weakness of our study is the simplified treatment (see description of implementation). Because only the last decision is being displayed, one could argue that contrary to a real history of decisions, now we simply provide the players with the possibility to punish deviant behavior. Thus, statements about the effect of reputation have to be made with caution.
 
 6 Lessons Learnt
-- 	umständliches coding, e.g. treatment if bedingungen statt event listener
-6.1 Reflect about what you knew before lecture 1, and what you have
-achieved at the end of the course. 
-6.2 What recommendations would you give to a future participant of this course and to the lecturer.
+6.1 Reflect about what you knew before lecture 1, and what you have achieved at the end of the course. 
+We were all some beginners in programming with JavaScript (especially in Node.js) and HTML. But one group member has some school knowledge in JavaScript so that was a little bit helpful for understanding what is happening in the code. Moreover we developed an elaborated online experimental design on the basis of scientific literature. Also we started almost from the scratch and in the end; we ended up with an online experiment that runs without major problems.
+6.2 What recommendations would you give to a future participant of this course and to the lecturer?
+First at all, this entire seminar was very helpful in having a look into coding some JavaScript and HTML elements and displays them into a local browser. We, as the group, have really some fun at coding the online experiment as well as there were some situations which were very frustrating, but in the end of each day there was always a lucky moment if something works. Additionally, at the beginning we have some issues to understand the syntax. Therefore we had to do some JavaScript coding at home, so we have can play a little bit around. Furthermore, the lecturer has can provide students with some easy homework (not mandatory) to get some experience how sampling coding works, especially for some basic Node.js and JavaScript functions. For example some simple tasks to work in the nodegame environment, like “Take the dictator basic game and change some simple details”.
 
--	Little bit html in parts of the team, no experience with experiments at all
--	Some school knowledge in JavaScript (one group member)
--	We developed an elaborated online experimental design on the basis of scientific literature
--	We started almost from scratch and in the end, we ended up with an online experiment that runs without major errors. 
--	6.2 Take more time for coding if your design is somewhat complex
--	Do some JavaScript coding at home, playing around 
--	Lecturer: Provide students with some easy homework (not mandatory) to get some experience how simple coding works (both JavaScript and basic nodegame functions. Some tasks to early start working in the nodegame environment. E.g. “Take the dictator basic game and change some simple details”
 
 Bibliography
 Fehr, E., Fischbacher, U., 2003. The nature of human altruism. Nature 425, 785–791. https://doi.org/10.1038/nature02043
