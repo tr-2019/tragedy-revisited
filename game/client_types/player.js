@@ -118,6 +118,9 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
             W.setInnerHTML('totalPool', totalPool);
           });
 
+          node.on.data('empty', function(msg){
+            node.done({choice: 'null'});
+          });
             // button options
             var c_button,nc_button;
 
@@ -143,18 +146,25 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
             var myEarning, totalFish, myBank, otherChoice, totalPool;
             node.on.data('pbgame_results', function(msg) {
                 myEarning = msg.data.myEarning;
-                W.setInnerHTML('myearning', myEarning);
+                W.setInnerHTML('myearning', 'You earned ' +  myEarning +
+              ' fish.');
                 totalFish = msg.data.totalFish;
-                W.setInnerHTML('totalFish', totalFish);
+                W.setInnerHTML('totalFish', 'Total number of fish caught by all players in this round: '
+                + totalFish);
                 myBank = msg.data.myBank;
                 W.setInnerHTML('mybank', myBank);
                 totalPool = msg.data.totalPool;
-                W.setInnerHTML('totalPool', totalPool);
+                W.setInnerHTML('totalPool', totalPool + ' fish are left in the pond.');
                 otherChoice = msg.data.otherChoice;
                 if (otherChoice) {
                     W.setInnerHTML('otherchoice', otherChoice);
                 };
                 node.game.MoneyTalks.update(myEarning);
+
+            });
+
+            node.on.data('empty', function(msg) {
+              W.setInnerHTML('empty', 'You fail, you looser!');
 
             });
         },
@@ -230,7 +240,7 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
               //  W.setInnerHTML('waitingFor', 'Your partner made a decision!');
                 W.setInnerHTML('decision',
                                'Another player decided to give ' +
-                               msg.data.donation + ' fish to you.');
+                               msg.data.donation + ' coins to you.');
                 myEarning = msg.data.donation;
                 // Display from
                 // If an history is in msg.data, display history.
@@ -282,7 +292,7 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
         }
     });
 
-    stager.extendStep('feedback2', {
+    /**stager.extendStep('feedback2', {
         widget:  {
             name: 'Feedback',
             options: {
@@ -294,31 +304,9 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
                 requiredChoice: false,
             }
         }
-    });
+    });*/
 
     // EndScreen in a Widget Step at the end of the game.
-stager.extendStep('endpayoff', {
-    donebutton: false,
-    frame: 'end.htm',
-    widget: {
-        name: 'EndScreen',
-        root: "body",
-        options: {
-            title: false, // Disable title for seamless Widget Step.
-            panel: false, // No border around.
-            // showEmailForm: true,
-            showFeedbackForm: true,
-            email: {
-                texts: {
-                    label: 'Enter your email (optional):',
-                    errString: 'Please enter a valid email and retry'
-                }
-            },
-            feedback: { minLength: 0 }
-        }
-    }
-});
-
  stager.extendStep('endpayoff', {
     donebutton: false,
     frame: 'end.htm',
