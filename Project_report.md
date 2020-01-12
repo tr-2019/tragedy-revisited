@@ -55,3 +55,14 @@ achieved at the end of the course.
 -	6.2 Take more time for coding if your design is somewhat complex
 -	Do some JavaScript coding at home, playing around 
 -	Lecturer: Provide students with some easy homework (not mandatory) to get some experience how simple coding works (both JavaScript and basic nodegame functions. Some tasks to early start working in the nodegame environment. E.g. “Take the dictator basic game and change some simple details”
+
+Bibliography
+Fehr, E., Fischbacher, U., 2003. The nature of human altruism. Nature 425, 785–791. https://doi.org/10.1038/nature02043
+Hardin, G., 1968. The Tragedy of the Commons. Science 162, 1243–1248. https://doi.org/10.1126/science.162.3859.1243
+Milinski, M., Semmann, D., Krambeck, H.-J., 2002. Reputation helps solve the ‘tragedy of the commons.’ Nature 415, 424–426. https://doi.org/10.1038/415424a
+Milinski, M., Semmann, D., Krambeck, H.-J., Marotzke, J., 2006. Stabilizing the Earth’s climate is not a losing game: Supporting evidence from public goods experiments. Proceedings of the National Academy of Sciences 103, 3994–3998. https://doi.org/10.1073/pnas.0504902103
+Sell, J., Reese, B., 2014. Social Dilemma Experiments in Sociology, Psychology, Political Science, and Economics, in: Laboratory Experiments in the Social Sciences. Elsevier, pp. 225–245. https://doi.org/10.1016/B978-0-12-404681-8.00010-8
+Semmann, D., Krambeck, H.-J., Milinski, M., 2005. Reputation is valuable within and outside one?s own social group. Behav Ecol Sociobiol 57, 611–616. https://doi.org/10.1007/s00265-004-0885-3
+Sylwester, K., Roberts, G., 2013. Reputation-based partner choice is an effective alternative to indirect reciprocity in solving social dilemmas. Evolution and Human Behavior 34, 201–206. https://doi.org/10.1016/j.evolhumbehav.2012.11.009
+
+
