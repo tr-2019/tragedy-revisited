@@ -174,7 +174,8 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
             });
 
             node.on.data('empty', function(msg) {
-              W.setInnerHTML('empty', 'You fail, you looser!');
+              W.setInnerHTML('empty', 'Oh no! Your group tried to catch all remaining fish in the pond at once. You will not earn any coins in this round.' +
+            ' Also, the fish population is extinct now. All remaining rounds of fishing will be skipped.');
 
             });
         },
