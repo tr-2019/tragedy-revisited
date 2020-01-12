@@ -14,7 +14,7 @@ var stepRules = ngc.stepRules;
 var J = ngc.JSUS;
 
 module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
-    var sumPool = 5;
+    var sumPool = 15;
     var node = gameRoom.node;
     var channel =  gameRoom.channel;
 
@@ -63,8 +63,32 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
             var i, len;
             var sumPayoff;
             var pid, client, choice, payoff;
+            var roundFish;
+            roundFish = 0;
 
             playerIds = Object.keys(node.game.history);
+
+            for (i = 0; i < playerIds.length; i++) {
+
+                pid = playerIds[i];
+                choice = getRecentChoice(pid, node.game.history);
+                if ('DEFECT' === choice) {
+                    payoff = 10;
+                };
+                if ('COOPERATE' === choice) {
+                    payoff = 5;
+                };
+                if ('null' === choice) {
+                  payoff = 0;
+                };
+                roundFish = roundFish + payoff;
+
+              };
+
+              //earnings by every player overall + refill the pool by
+              //min. value (5<10)
+
+                sumPool = sumPool - roundFish;
 
 
             sumPayoff = 0;
@@ -74,19 +98,16 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
                 choice = getRecentChoice(pid, node.game.history);
                 if ('DEFECT' === choice) {
                     payoff = 10;
-                }
+                };
                 if ('COOPERATE' === choice) {
                     payoff = 5;
-                }
-                else {
+                };
+                if ('null' === choice) {
                   payoff = 0;
-                }
+                };
 
                 //earnings by every player each round
                 sumPayoff += payoff;
-                //earnings by every player overall + refill the pool by
-                //min. value (5<10)
-                sumPool = sumPool - payoff;
 
                 node.game.pl.each(function(player) {
                   if (sumPool <= 0) {
@@ -108,9 +129,8 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
                         sendToClient(pid, payoff, sumPayoff, sumPool)};
                     }, 100);
                 })(pid, payoff);
-            }
-        }
-    });
+            }}
+        });
 
     stager.extendStep('irgame1', {
         matcher: {
