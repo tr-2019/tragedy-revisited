@@ -79,13 +79,6 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
                 sumPool = sumPool - payoff + 5;
                 addCoins(pid, payoff, node.game.history);
                 updateWin(pid, payoff);
-                client = channel.registry.getClient(pid);
-                  if ('undefined' === typeof client.win) {
-                      client.win = payoff;
-                    }
-                  else {
-                      client.win += payoff;
-                    }
 
                 // Will be executed after the for-loop is finished.
                 // This is an anonymous self-executing function.
@@ -101,11 +94,8 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
 
     stager.extendStep('irgame1', {
         matcher: {
-            // roles: [ 'DONOR', 'RECEIVER' ],
             match: 'round_robin',
             cycle: 'repeat',
-            // sayPartner: false
-            // skipBye: false,
         },
         cb: function() {
             // Creating a new array every round of the receiving offers (manipulated)
@@ -165,8 +155,8 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
 
                 node.game.offers.push({
                     donation: offer,
-                    receiver: observer,
-                    from: msg.from
+                    receiver: msg.from,
+                    from: observer
                 });
 
                 node.game.offers_um.push({
@@ -181,7 +171,7 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
     stager.extendStep('irgame2', {
         // maybe matcher here too.
         cb: function() {
-            var i, pid, client, len, receiver, data, data_um;
+            var i, pid, client, len, receiver, receiver2, data, data_um;
             var playerIds = [];
             len = node.game.offers.length;
             // does not make sense yo, not the same order of decisions in arrays
@@ -191,28 +181,19 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
                 // 'coins' are undefined in history
                 //playerIds = Object.keys(node.game.offers[i].from);
                 pid = playerIds[i];
-                receiver = node.game.offers[i].receiver;
+                receiver2 = node.game.offers[i].receiver;
+                receiver = node.game.offers[i].from;
                 data = {
                     from: node.game.offers[i].from,
                     donation: node.game.offers[i].donation,
                     receiver: node.game.offers[i].receiver,
-                    loss: node.game.offers_um[i].donation_um
+                    loss: node.game.offers_um[i].donation_um * (-1),
                 };
-                // unmainpulated offer send to own pool
-                data_um = 0;
-                data_um = {loss: node.game.offers_um[i].donation_um * (-1)};
-
-                //playerIds = Object.keys(node.game.history);
-                addCoins(pid, data.donation, node.game.history);
-                addCoins(pid, data_um, node.game.history);
-
-                client = channel.registry.getClient(pid);
-                  if ('undefined' === typeof client.win) {
-                      client.win = data.donation + data_um.loss;
-                    }
-                  else {
-                      client.win += data.donation + data_um.loss;
-                    }
+                
+                addCoins(receiver, data.donation, node.game.history);
+                addCoins(receiver2, data.loss, node.game.history);
+                updateWin(receiver, data.donation);
+                updateWin(receiver2, data.loss);
 
                 // Send the decision to each player.
                 node.say('decision', receiver, data);
@@ -312,7 +293,7 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
             node.game.memory.save('data.json');
     }
 });
-    
+
     stager.extendStep('end', {
         cb: function() {
             // Save data in the data/roomXXX directory.
