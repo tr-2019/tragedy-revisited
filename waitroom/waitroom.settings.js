@@ -43,7 +43,7 @@ module.exports = {
      *
      * Default: GROUP_SIZE
      */
-    // POOL_SIZE: 2,
+    POOL_SIZE: 4,
 
     /**
      * ## N_GAMES (number) Optional
