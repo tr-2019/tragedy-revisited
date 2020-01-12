@@ -318,6 +318,32 @@ stager.extendStep('endpayoff', {
         }
     }
 });
+    
+ stager.extendStep('endpayoff', {
+    donebutton: false,
+    frame: 'end.htm',
+    cb: function() {
+        node.game.visualTimer.setToZero();
+    },
+    widget: {
+        name: 'EndScreen',
+        root: "body",
+        options: {
+            title: false, // Disable title for seamless Widget Step.
+            panel: false, // No border around.
+            showEmailForm: false,
+            showFeedbackForm: true,
+            showTotalWin: true,
+             email: {
+                texts: {
+                    label: 'Enter your email (optional):',
+                    errString: 'Please enter a valid email and retry'
+                }
+            },
+            feedback: { minLength: 0 }
+        }
+    }
+});
 
     stager.extendStep('end', {
         donebutton: false,
