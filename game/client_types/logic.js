@@ -179,7 +179,6 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
           };
                 node.on.data('done', function(msg) {
                   var observer;
-                  var pid, playerIds;
                   var offer, offer2;
 
                   observer = node.game.matcher.getMatchFor(msg.from);
@@ -195,12 +194,13 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
 
                 node.game.offers.push({
                     donation: offer,
-                    receiver: msg.from,
-                    from: observer,
+                    receiver: observer,
+                    from: msg.from,
                 });
 
                 node.game.offers_um.push({
-                  donation_um: offer2
+                  donation_um: offer2,
+                  from: msg.from,
                 });
 
            });
@@ -211,18 +211,19 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
     stager.extendStep('irgame2', {
         // maybe matcher here too.
         cb: function() {
-            var i, pid, client, len, receiver, receiver2, data, data_um;
-            var playerIds = [];
+            var i, client, len, receiver, data, data_um;
+            var myself;
             len = node.game.offers.length;
             // does not make sense yo, not the same order of decisions in arrays
             //but wit node.game.offers([i]).from([i]) -> undefined
-            playerIds = Object.keys(node.game.history);
+          //  playerIds = Object.keys(node.game.history);
             for (i=0 ; i < len ; i++) {
                 // 'coins' are undefined in history
                 //playerIds = Object.keys(node.game.offers[i].from);
-                pid = playerIds[i];
-                receiver2 = node.game.offers[i].receiver;
-                receiver = node.game.offers[i].from;
+              //  pid = playerIds[i];
+              //  receiver2 = node.game.offers[i].from;
+                receiver = node.game.offers[i].receiver;
+                myself = node.game.offers_um[i].from;
                 data = {
                     from: node.game.offers[i].from,
                     donation: node.game.offers[i].donation,
@@ -231,13 +232,13 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
                 };
 
                 addCoins(receiver, data.donation, node.game.history);
-                addCoins(receiver2, data.loss, node.game.history);
+                addCoins(myself, data.loss, node.game.history);
                 updateWin(receiver, data.donation);
-                updateWin(receiver2, data.loss);
+                updateWin(myself, data.loss);
 
                 // Send the decision to each player.
                 node.say('decision', receiver, data);
-                node.say('loss', pid, data);
+                node.say('loss', myself, data);
             }
 
             console.log('Game round: ' + node.player.stage.round);
