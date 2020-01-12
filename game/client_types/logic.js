@@ -14,7 +14,7 @@ var stepRules = ngc.stepRules;
 var J = ngc.JSUS;
 
 module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
-    var sumPool = 100;
+    var sumPool = 5;
     var node = gameRoom.node;
     var channel =  gameRoom.channel;
 
@@ -39,10 +39,15 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
 
             var restPool;
             restPool = sumPool;
-
             node.game.pl.each(function(player) {
+            if (sumPool > 0) {
             node.say('leftfish', player.id, restPool)
+          }
+          else {
+            node.say('empty', player.id)
+          }
           });
+
 
             node.on.data('done', function (msg) {
                 var id;
@@ -61,6 +66,7 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
 
             playerIds = Object.keys(node.game.history);
 
+
             sumPayoff = 0;
             for (i = 0; i < playerIds.length; i++) {
 
@@ -69,23 +75,37 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
                 if ('DEFECT' === choice) {
                     payoff = 10;
                 }
-                else {
+                if ('COOPERATE' === choice) {
                     payoff = 5;
                 }
+                else {
+                  payoff = 0;
+                }
+
                 //earnings by every player each round
                 sumPayoff += payoff;
                 //earnings by every player overall + refill the pool by
                 //min. value (5<10)
-                sumPool = sumPool - payoff + 5;
-                addCoins(pid, payoff, node.game.history);
-                updateWin(pid, payoff);
+                sumPool = sumPool - payoff;
 
+                node.game.pl.each(function(player) {
+                  if (sumPool <= 0) {
+                    node.say('empty', player.id)
+                    }
+              });
+
+                if (sumPool > 0) {
+                  addCoins(pid, payoff, node.game.history);
+                  updateWin(pid, payoff);
+                  sumPool +=5
+                }
                 // Will be executed after the for-loop is finished.
                 // This is an anonymous self-executing function.
                 // It is called "closure".
                 (function(pid, payoff) {
                     setTimeout(function() {
-                        sendToClient(pid, payoff, sumPayoff, sumPool);
+                      if(sumPool > 0) {
+                        sendToClient(pid, payoff, sumPayoff, sumPool)};
                     }, 100);
                 })(pid, payoff);
             }
@@ -156,7 +176,7 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
                 node.game.offers.push({
                     donation: offer,
                     receiver: msg.from,
-                    from: observer
+                    from: observer,
                 });
 
                 node.game.offers_um.push({
@@ -189,7 +209,7 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
                     receiver: node.game.offers[i].receiver,
                     loss: node.game.offers_um[i].donation_um * (-1),
                 };
-                
+
                 addCoins(receiver, data.donation, node.game.history);
                 addCoins(receiver2, data.loss, node.game.history);
                 updateWin(receiver, data.donation);
@@ -197,7 +217,7 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
 
                 // Send the decision to each player.
                 node.say('decision', receiver, data);
-                node.say('loss', pid, data_um);
+                node.say('loss', pid, data);
             }
 
             console.log('Game round: ' + node.player.stage.round);
