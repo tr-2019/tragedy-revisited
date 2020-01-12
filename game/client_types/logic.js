@@ -223,9 +223,10 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
         }
     });
 
-    stager.extendStep('endpayoff', {
+        stager.extendStep('endpayoff', {
     cb: function() {
         // All available options shown here.
+
         gameRoom.computeBonus({
 
             // The names of the columns in the dump file.
@@ -247,7 +248,16 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
 
             // The name of the property holding the bonus.
             // Default: 'win'
-            winProperty: 'win',
+            cb: function(){
+              var i, len;
+              var playerIds = [];
+              len = node.game.offers.length,
+              playerIds = Object.keys(node.game.history);
+              for (i=0 ; i < len ; i++) {
+                node.game.client[i].win
+              };
+              winProperty: node.game.client.win
+            },
 
             // The decimals included in the bonus (-1 = no rounding)
             // Default: 2
@@ -291,15 +301,18 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
         });
 
         // Do something with eventual incoming data from EndScreen.
-        // node.on.data('email', function(msg) {
+        node.on.data('email', function(msg) {
            // Store msg to file.
-        // });
+        });
         node.on.data('feedback', function(msg) {
            // Store msg to file.
         });
+
+        // Save data in the data/roomXXX directory.
+            node.game.memory.save('data.json');
     }
 });
-
+    
     stager.extendStep('end', {
         cb: function() {
             // Save data in the data/roomXXX directory.
