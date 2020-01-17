@@ -266,7 +266,7 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
             // If different from 1, the bonus is multiplied by the exchange
             // rate, and a new property named (winProperty+'Raw') is added.
             // Default: (settings.EXCHANGE_RATE || 1)
-            exchangeRate: 1,
+            exchangeRate: 0.22,
 
             // The name of the property holding the bonus.
             // Default: 'win'
