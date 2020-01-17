@@ -43,7 +43,7 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
 
         this.MoneyTalks = node.widgets.append('MoneyTalks', header, {
             title: 'My Earnings: ',
-            currency: ' Fish',
+            currency: ' coins',
             money: 0,
             precision: 1,
         });
@@ -82,7 +82,7 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
                         name: 'ChoiceTable',
                         id: 'fish_reproduction',
                         mainText: 'How many new fish are born after each round?',
-                        hint: 'If you did not alredy extinct the whole population, of course.',
+                        hint: 'If your group did not already extinct the whole population, of course.',
                         choices: [
                             '0',
                             '30',
@@ -97,7 +97,7 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
                     {
                         name: 'ChoiceTable',
                         id: 'reciprocity',
-                        mainText: '4 ECU can be received every round if your potential is willing to donate. If he is, how much ECU does he have to take from his account?',
+                        mainText: '4 ECU can be received every round if your colleague is willing to donate. If he/she is, how many coins does he/she have to take from his/her account?',
                         hint: 'The mayor adds something ...',
                         choices: [
                             '0',
@@ -157,7 +157,7 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
             node.on.data('pbgame_results', function(msg) {
                 myEarning = msg.data.myEarning;
                 W.setInnerHTML('myearning', 'You earned ' +  myEarning +
-              ' fish.');
+              ' coins.');
                 totalFish = msg.data.totalFish;
                 W.setInnerHTML('totalFish', 'Total number of fish caught by all players in this round: '
                 + totalFish);
@@ -333,6 +333,7 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
             showEmailForm: false,
             showFeedbackForm: true,
             showTotalWin: true,
+            totalWinCurrency: '€',
              email: {
                 texts: {
                     label: 'Enter your email (optional):',
