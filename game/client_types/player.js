@@ -203,14 +203,14 @@ module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
 
             node.on.data('history', function(msg) {
               W.setInnerHTML('meeting', 'You meet Player'
-              + msg.data.from + ' at the fish market.');
+              + msg.data.from + ' at the town hall.');
               W.setInnerHTML('pbgdecision',
               'And you have heard from your colleagues that Player' +
               msg.data.from + ' has fished '
                + msg.data.lastd + ' fish in the last round.')
           });
             node.on.data('nohistory', function(msg) {
-              W.setInnerHTML('nohistory', "You meet another anonymous player on the fish market. ")
+              W.setInnerHTML('nohistory', "You meet another anonymous player at the town hall. ")
             });
             // W.gid = W.getElementById.
             button1 = W.gid('submitOffer1');
