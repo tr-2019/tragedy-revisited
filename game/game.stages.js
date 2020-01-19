@@ -34,8 +34,8 @@ module.exports = function(stager, settings) {
  });
 
     // Modify the stager to skip one stage.
-  //  stager.skip('instructions');
-  //  stager.skip('quiz');
+    stager.skip('instructions');
+    stager.skip('quiz');
     stager.skip('feedback', 'feedback2')
   //  stager.skip('player', 'pbgame_respond');
   //  stager.skip('player', 'pbgame_results');
