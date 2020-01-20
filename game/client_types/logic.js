@@ -14,7 +14,7 @@ var stepRules = ngc.stepRules;
 var J = ngc.JSUS;
 
 module.exports = function(treatmentName, settings, stager, setup, gameRoom) {
-    var sumPool = 60;
+    var sumPool = 20;
     var node = gameRoom.node;
     var channel =  gameRoom.channel;
 
